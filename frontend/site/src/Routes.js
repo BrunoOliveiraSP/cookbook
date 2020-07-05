@@ -11,7 +11,7 @@ export default function Routes() {
     const styles = {
         display: 'flex',
         flexDirection: 'row',
-        height: '100vh',
+        minHeight: '100vh',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#282c34',

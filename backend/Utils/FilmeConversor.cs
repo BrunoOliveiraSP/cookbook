@@ -24,6 +24,7 @@ namespace backend.Utils
         public Models.Response.FilmeResponse ParaResponse(Models.TbFilme filme)
         {
             Models.Response.FilmeResponse response = new Models.Response.FilmeResponse();
+            response.Id = filme.IdFilme;
             response.Nome = filme.NmFilme;
             response.Genero = filme.DsGenero;
             response.Duracao = filme.NrDuracao;

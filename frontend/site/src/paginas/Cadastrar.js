@@ -3,25 +3,34 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import FilmeApi from '../services/FilmeApi';
+
+const inicial = {
+    id:0, 
+    nome:"", 
+    genero:"", 
+    duracao:0, 
+    avaliacao:0.0, 
+    disponivel: true, 
+    lancamento: new Date().toISOString()
+}
+
 export default function Cadastrar() {
-
-    const data = {
-        id:0, 
-        filme:"", 
-        genero:"", 
-        duracao:0, 
-        avaliacao:0.0, 
-        disponivel: true, 
-        lancamento: new Date()
-    }
-
+    const filmeApi = new FilmeApi();
     const navigation = useHistory();
+    const [filme, setFilme] = useState(inicial);
 
-    const [filme, setFilme] = useState(data);
 
-    const salvarClick = () => {
-
+    const salvarClick = async () => {
+        const response = await filmeApi.inserir(filme);
+        if (!response.erro) {
+            alert(`Filme cadastrado! (${response.id})`);
+            setFilme(response);
+        } else {
+            alert(response.erro);
+        }
     }
+
 
     return (
         <div>
@@ -38,8 +47,8 @@ export default function Cadastrar() {
                     <div>Filme</div>
                     <div>
                         <input type="text"
-                            value={filme.filme}
-                            onChange={(e) => setFilme({...filme, filme: e.target.value})}
+                            value={filme.nome}
+                            onChange={(e) => setFilme({...filme, nome: e.target.value})}
                             />
                     </div>
                 </div>
@@ -91,7 +100,7 @@ export default function Cadastrar() {
                         <input 
                             className="w-100"
                             type="date"
-                            value={filme.lancamento.toISOString().substr(0, 10)}
+                            value={new Date(filme.lancamento).toISOString().substr(0, 10)}
                             onChange={(e) => setFilme({...filme, lancamento: new Date(e.target.value)})}
                             />
                     </div>

@@ -1,20 +1,28 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 
+import FilmeApi from '../services/FilmeApi';
 
-let data = [
-    { id:1, filme:"Avengers", genero:"Ação", duracao:125, avaliacao:6.5, disponivel:true, lancamento:"2003-05-15T00:00:00"},
-    { id:2, filme:"Harry Potter", genero:"Aventura", duracao:115, avaliacao:9.5, disponivel:false, lancamento:"2008-05-12T00:00:00"},
-    { id:3, filme:"A bela e a fera", genero:"Romance", duracao:112, avaliacao:8.2, disponivel:true, lancamento:"2020-04-13T00:00:00"}       
-]
 
 export default function Consultar() {
-
+    const filmeApi = new FilmeApi();
     const navigation = useHistory();
+    const [filmes, setFilmes] = useState([]); 
 
-    const [filmes, setFilmes] = useState(data); 
+
+    useEffect(() => {
+        const carregarTela = async () => {
+            const response = await filmeApi.listar();
+            if (!response.erro)
+                setFilmes(response);
+            else 
+                alert(response.erro);
+        }
+        carregarTela();
+    }, [])
+
 
     return (
         <div className="w-75">
@@ -42,12 +50,12 @@ export default function Consultar() {
                     {filmes.map(f => 
                         <tr key={f.id}>
                             <td>{f.id}</td>
-                            <td>{f.filme}</td>
+                            <td>{f.nome}</td>
                             <td>{f.genero}</td>
                             <td>{f.duracao}</td>
                             <td>{f.avaliacao}</td>
                             <td>{f.disponivel ? "Sim" : "Não"}</td>
-                            <td>{f.lancamento}</td>
+                            <td>{new Date(f.lancamento).toLocaleDateString()}</td>
                         </tr>
                     )}
                     </tbody>
